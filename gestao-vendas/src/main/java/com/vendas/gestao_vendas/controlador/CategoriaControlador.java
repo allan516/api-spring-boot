@@ -46,6 +46,14 @@ public class CategoriaControlador {
     public ResponseEntity<Categoria> atualizar(@Valid @PathVariable Long codigo, @RequestBody Categoria categoria){
         return ResponseEntity.ok(categoriaServico.atualizar(codigo, categoria));
     }
+
+    @ApiOperation(value = "Deletar")
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long codigo) {
+        categoriaServico.deletar(codigo);
+
+    }
 /*
 Observação:
  Quando o obj é recebido pelo post ele não vem na url da requisição e sim pelo corpo da requisição http,dessa forma,

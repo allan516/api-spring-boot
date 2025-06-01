@@ -24,12 +24,18 @@ public class CategoriaServico {
     }
 
     public Categoria salvar(Categoria categoria) {
+
         return categoriaRepositorio.save(categoria);
     }
+
     public Categoria atualizar(Long codigo, Categoria categoria) {
         Categoria categoriaSalvar = validarCategoriaExiste(codigo);
         BeanUtils.copyProperties(categoria, categoriaSalvar, "codigo");
         return categoriaRepositorio.save(categoriaSalvar);
+    }
+
+    public void deletar(Long codigo) {
+        categoriaRepositorio.deleteById(codigo);
     }
 
     private Categoria validarCategoriaExiste(Long codigo) {
