@@ -3,7 +3,6 @@ package com.vendas.gestao_vendas.servico;
 import com.vendas.gestao_vendas.entidades.Categoria;
 import com.vendas.gestao_vendas.excecao.RegraNegocioException;
 import com.vendas.gestao_vendas.repositorio.CategoriaRepositorio;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
