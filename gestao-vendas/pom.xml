@@ -69,8 +69,12 @@
 			<artifactId>opentracing-spring-jaeger-web-starter</artifactId>
 			<version>3.2.2</version>
 		</dependency>
+		<dependency>
+			<groupId>io.opentracing.contrib</groupId>
+			<artifactId>opentracing-jdbc</artifactId>
+			<version>0.2.12</version>
+		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
