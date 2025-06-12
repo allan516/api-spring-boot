@@ -14,11 +14,11 @@ public class ProdutoServico {
     @Autowired
     private ProdutoRepositorio produtoRepositorio;
 
-    public List<Produto> listarTodos() {
-        return produtoRepositorio.findAll();
+    public List<Produto> listarTodos(Long codigoCategoria) {
+        return produtoRepositorio.findByCategoriaCodigo(codigoCategoria);
     }
 
-    public Optional<Produto> buscarPorCodigo(Long codigo) {
-        return produtoRepositorio.findById(codigo);
+    public Optional<Produto> buscarPorCodigo(Long codigo, Long codigoCategoria) {
+        return produtoRepositorio.buscarPorCodigo(codigo, codigoCategoria);
     }
 }
