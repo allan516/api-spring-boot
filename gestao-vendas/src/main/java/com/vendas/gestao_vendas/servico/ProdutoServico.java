@@ -21,4 +21,8 @@ public class ProdutoServico {
     public Optional<Produto> buscarPorCodigo(Long codigo, Long codigoCategoria) {
         return produtoRepositorio.buscarPorCodigo(codigo, codigoCategoria);
     }
+
+    public Produto salvar(Produto produto) {
+        return produtoRepositorio.save(produto);
+    }
 }
