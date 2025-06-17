@@ -39,7 +39,7 @@ public class ProdutoServico {
     }
 
     private void validarCategoriaDoProdutoExiste(Long codigoCategoria) {
-        if (codigoCategoria == null) {
+        if (codigoCategoria == null || codigoCategoria < 1) {
             throw new RegraNegocioException("A categoria não pode ser nula.");
         }
 
