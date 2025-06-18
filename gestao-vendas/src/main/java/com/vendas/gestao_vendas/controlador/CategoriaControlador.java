@@ -41,7 +41,7 @@ public class CategoriaControlador {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriasalva);
     }
 
-    @ApiOperation(value = "Atualizar", nickname = "atualizar")
+    @ApiOperation(value = "Atualizar", nickname = "atualizarCategoria")
     @PutMapping("/{codigo}")
     public ResponseEntity<Categoria> atualizar(@Valid @PathVariable Long codigo, @RequestBody Categoria categoria){
         return ResponseEntity.ok(categoriaServico.atualizar(codigo, categoria));
