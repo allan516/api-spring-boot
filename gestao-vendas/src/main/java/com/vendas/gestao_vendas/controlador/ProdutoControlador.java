@@ -46,4 +46,11 @@ public class ProdutoControlador {
     public ResponseEntity<Produto> atualizar(@PathVariable Long codigoCategoria, @PathVariable Long codigoProduto, @Valid @RequestBody Produto produto) {
         return ResponseEntity.ok(produtoServico.atualizar(codigoCategoria, codigoProduto, produto));
     }
+
+    @ApiOperation(value = "deletar", nickname = "deletarProduto")
+    @DeleteMapping("/{codigoProduto}") //precisa ser o mesmo nome do parametro ou (name: "nome") no @PathVariable
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long codigoCategoria, @PathVariable Long codigoProduto) {
+        produtoServico.deletar(codigoCategoria, codigoProduto);
+    }
 }
