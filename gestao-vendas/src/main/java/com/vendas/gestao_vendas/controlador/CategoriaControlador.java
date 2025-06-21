@@ -1,5 +1,6 @@
 package com.vendas.gestao_vendas.controlador;
 
+import com.vendas.gestao_vendas.dto.CategoriaResponseDTO;
 import com.vendas.gestao_vendas.entidades.Categoria;
 import com.vendas.gestao_vendas.servico.CategoriaServico;
 import io.swagger.annotations.Api;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Api(tags = "Categoria")
 @RestController
@@ -23,15 +25,20 @@ public class CategoriaControlador {
 
     @ApiOperation(value = "Listar", nickname = "listarTodas")
     @GetMapping
-    public List<Categoria> listarTodas() {
-        return categoriaServico.listarTodas();
+    public List<CategoriaResponseDTO> listarTodas() {
+
+        return categoriaServico.listarTodas().stream()
+                .map(categoria -> CategoriaResponseDTO.converterParaCategoriaDTO(categoria))
+                .collect(Collectors.toList());
     }
 
     @ApiOperation(value = "Listar por código", nickname = "buscarPorId")
     @GetMapping("/{codigo}")
-    public ResponseEntity<Optional<Categoria>> buscarPorId(@PathVariable Long codigo) {
+    public ResponseEntity<CategoriaResponseDTO> buscarPorId(@PathVariable Long codigo) {
         Optional<Categoria> categoria = categoriaServico.buscarPorCodigo(codigo);
-        return categoria.isPresent() ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
+        return categoria.isPresent()
+                ? ResponseEntity.ok(CategoriaResponseDTO.converterParaCategoriaDTO(categoria.get()))
+                : ResponseEntity.notFound().build();
     }
 
     @ApiOperation(value = "Salvar", nickname = "salvarCategoria")

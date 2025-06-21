@@ -13,7 +13,7 @@ public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo")
-    private long codigo;
+    private Long codigo;
 
     @Column(name = "nome")
     @NotBlank(message = "Nome")
