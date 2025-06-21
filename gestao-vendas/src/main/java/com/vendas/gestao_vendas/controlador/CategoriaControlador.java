@@ -1,5 +1,6 @@
 package com.vendas.gestao_vendas.controlador;
 
+import com.vendas.gestao_vendas.dto.CategoriaRequestDTO;
 import com.vendas.gestao_vendas.dto.CategoriaResponseDTO;
 import com.vendas.gestao_vendas.entidades.Categoria;
 import com.vendas.gestao_vendas.servico.CategoriaServico;
@@ -43,15 +44,15 @@ public class CategoriaControlador {
 
     @ApiOperation(value = "Salvar", nickname = "salvarCategoria")
     @PostMapping
-    public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria) {
-        Categoria categoriasalva = categoriaServico.salvar(categoria);
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoriasalva);
+    public ResponseEntity<CategoriaResponseDTO> salvar(@Valid @RequestBody CategoriaRequestDTO categoriaDTO) {
+        Categoria categoriaSalva = categoriaServico.salvar(categoriaDTO.converterParaEntidade());
+        return ResponseEntity.status(HttpStatus.CREATED).body(CategoriaResponseDTO.converterParaCategoriaDTO(categoriaSalva));
     }
 
     @ApiOperation(value = "Atualizar", nickname = "atualizarCategoria")
     @PutMapping("/{codigo}")
-    public ResponseEntity<Categoria> atualizar(@Valid @PathVariable Long codigo, @RequestBody Categoria categoria){
-        return ResponseEntity.ok(categoriaServico.atualizar(codigo, categoria));
+    public ResponseEntity<Categoria> atualizar(@Valid @PathVariable Long codigo, @RequestBody CategoriaRequestDTO categoriaDTO){
+        return ResponseEntity.ok(categoriaServico.atualizar(codigo, categoriaDTO.converterParaEntidade(codigo)));
     }
 
     @ApiOperation(value = "Deletar", nickname = "deletarCategoria")
