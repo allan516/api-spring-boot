@@ -14,7 +14,7 @@ public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo")
-    private long codigo;
+    private Long codigo;
 
     @Column(name = "descricao")
     @NotBlank(message = "Descrição")
