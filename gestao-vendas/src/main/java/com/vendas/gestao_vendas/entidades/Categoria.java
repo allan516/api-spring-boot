@@ -30,7 +30,7 @@ public class Categoria {
     public Categoria() {}
 
 
-    public long getCodigo() {
+    public Long getCodigo() {
         return codigo;
     }
 
