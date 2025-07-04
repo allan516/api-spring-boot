@@ -1,5 +1,6 @@
 package com.vendas.gestao_vendas.controlador;
 
+import com.vendas.gestao_vendas.dto.cliente.ClienteResponseDTO;
 import com.vendas.gestao_vendas.entidades.Cliente;
 import com.vendas.gestao_vendas.servico.ClienteServico;
 import io.swagger.annotations.Api;
@@ -25,17 +26,18 @@ public class ClienteControlador {
 
     @ApiOperation(value = "Listar", nickname = "listarTodas")
     @GetMapping
-    public List<Cliente> listarTodas() {
+    public List<ClienteResponseDTO> listarTodas() {
 
-        return clienteServico.listarTodos();
+        return clienteServico.listarTodos().stream()
+                .map(cliente -> ClienteResponseDTO.converterParaClienteDTO(cliente)).collect(Collectors.toList());
     }
 
-    @ApiOperation(value = "Listar por código", nickname = "buscarPorId")
+    @ApiOperation(value = "Listar por código", nickname = "buscarClientePorId")
     @GetMapping("/{codigo}")
-    public ResponseEntity<Cliente> buscarPorId(@PathVariable Long codigo) {
+    public ResponseEntity<ClienteResponseDTO> buscarPorId(@PathVariable Long codigo) {
         Optional<Cliente> cliente = clienteServico.buscarPorCodigo(codigo);
         return cliente.isPresent()
-                ? ResponseEntity.ok(cliente.get())
+                ? ResponseEntity.ok(ClienteResponseDTO.converterParaClienteDTO(cliente.get()))
                 : ResponseEntity.notFound().build();
     }
 

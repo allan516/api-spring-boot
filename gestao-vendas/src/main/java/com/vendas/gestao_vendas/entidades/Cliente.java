@@ -18,7 +18,7 @@ public class Cliente {
     private String telefone;
 
     @Column(name = "ativo")
-    private boolean ativo;
+    private Boolean ativo;
 
     @Embedded
     private Endereco endereco;
@@ -47,7 +47,7 @@ public class Cliente {
         this.telefone = telefone;
     }
 
-    public boolean isAtivo() {
+    public boolean getAtivo() {
         return ativo;
     }
 
