@@ -38,6 +38,10 @@ public class ClienteServico {
         return clienteRepositorio.save(clienteAtualizar);
     }
 
+    public void deletar(Long codigo) {
+        clienteRepositorio.deleteById(codigo);
+    }
+
     private Cliente validarClienteExiste(Long codigo) {
         Optional<Cliente> cliente = buscarPorCodigo(codigo);
         if (cliente.isEmpty()) {

@@ -54,4 +54,11 @@ public class ClienteControlador {
         return ResponseEntity.ok(ClienteResponseDTO.converterParaClienteDTO(clienteAtualizado));
     }
 
+    @ApiOperation(value = "Deletar", nickname = "deletarCliente")
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long codigo) {
+        clienteServico.deletar(codigo);
+    }
+
 }
