@@ -48,4 +48,10 @@ public class ClienteControlador {
         return ResponseEntity.status(HttpStatus.CREATED).body(ClienteResponseDTO.converterParaClienteDTO(clientesalvo));
     }
 
+    @PutMapping("/{codigo}")
+    public ResponseEntity<ClienteResponseDTO> atualizar(@PathVariable Long codigo, @Valid @RequestBody ClienteRequestDTO clienteDto) {
+        Cliente clienteAtualizado = clienteServico.atualizar(codigo, clienteDto.converterParaClienteDTO(codigo));
+        return ResponseEntity.ok(ClienteResponseDTO.converterParaClienteDTO(clienteAtualizado));
+    }
+
 }
