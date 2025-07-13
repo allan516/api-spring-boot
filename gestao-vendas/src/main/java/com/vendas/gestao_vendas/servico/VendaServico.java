@@ -50,7 +50,7 @@ private ItemVendaRepositorio itemVendaRepositorio;
     }
 
     private VendaResponseDTO criandoVendaResponseDTO(Venda venda) {
-        List<ItemVendaResponseDTO> itemVendasResponseDTO = itemVendaRepositorio.findiByVendaCodigo(venda.getCodigo()).stream().map(
+        List<ItemVendaResponseDTO> itemVendasResponseDTO = itemVendaRepositorio.findByVendaCodigo(venda.getCodigo()).stream().map(
                 this::criandoItensVendaResponseDto
         ).collect(Collectors.toList());
 
