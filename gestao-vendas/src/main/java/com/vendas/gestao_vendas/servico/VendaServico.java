@@ -1,7 +1,6 @@
 package com.vendas.gestao_vendas.servico;
 
 import com.vendas.gestao_vendas.dto.venda.ClienteVendaResponseDTO;
-import com.vendas.gestao_vendas.dto.venda.ItemVendaResponseDTO;
 import com.vendas.gestao_vendas.dto.venda.VendaResponseDTO;
 import com.vendas.gestao_vendas.entidades.Cliente;
 import com.vendas.gestao_vendas.entidades.ItemVenda;
@@ -18,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class VendaServico {
+public class VendaServico extends AbstractVendaServico {
 
 
     private VendaRepositorio vendaRepositorio;
@@ -35,15 +34,16 @@ private ItemVendaRepositorio itemVendaRepositorio;
     public ClienteVendaResponseDTO listarVendaPorCliente(Long cogigoCliente) {
         Cliente cliente = validarClienteVendaExiste(cogigoCliente);
         List<VendaResponseDTO> vendaResponseDtoList = vendaRepositorio.findByClienteCodigo(cogigoCliente).stream()
-                .map(this::criandoVendaResponseDTO).collect(Collectors.toList());
+                .map(venda -> criandoVendaResponseDTO(
+                        venda, itemVendaRepositorio.findByVendaCodigo(venda.getCodigo()))).collect(Collectors.toList());
         return new ClienteVendaResponseDTO(cliente.getNome(), vendaResponseDtoList);
     }
 
     public ClienteVendaResponseDTO listarVendaPorCodigo(Long codigoVenda) {
         Venda venda = validarVendaExiste(codigoVenda);
-        criandoVendaResponseDTO(venda);
+        List<ItemVenda> itensVendaList = itemVendaRepositorio.findByVendaCodigo(venda.getCodigo());
 
-        return new ClienteVendaResponseDTO(venda.getCliente().getNome(), Arrays.asList(criandoVendaResponseDTO(venda)));
+        return new ClienteVendaResponseDTO(venda.getCliente().getNome(), Arrays.asList(criandoVendaResponseDTO(venda, itensVendaList)));
     }
 
     private Venda validarVendaExiste(Long codigoVenda) {
@@ -65,17 +65,4 @@ private ItemVendaRepositorio itemVendaRepositorio;
         return cliente.get();
     }
 
-    private VendaResponseDTO criandoVendaResponseDTO(Venda venda) {
-        List<ItemVendaResponseDTO> itemVendasResponseDTO = itemVendaRepositorio.findByVendaCodigo(venda.getCodigo()).stream().map(
-                this::criandoItensVendaResponseDto
-        ).collect(Collectors.toList());
-
-        return new VendaResponseDTO(venda.getCodigo(), venda.getData(), itemVendasResponseDTO);
-
-    }
-
-    private ItemVendaResponseDTO criandoItensVendaResponseDto(ItemVenda itemVenda) {
-        return new ItemVendaResponseDTO(itemVenda.getCodigo(), itemVenda.getQuantidade(), itemVenda.getPrecoVendido(),
-                itemVenda.getProduto().getCodigo(), itemVenda.getProduto().getDescricao());
-    }
 }
