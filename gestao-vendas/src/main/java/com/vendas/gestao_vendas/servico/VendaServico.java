@@ -13,6 +13,8 @@ import com.vendas.gestao_vendas.repositorio.ItemVendaRepositorio;
 import com.vendas.gestao_vendas.repositorio.VendaRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,11 +52,29 @@ public class VendaServico extends AbstractVendaServico {
         return retornandoClienteVendaResponseDTO(venda, itensVendaList);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = Exception.class)
     public ClienteVendaResponseDTO salvar(Long codigoCliente, VendaRequestDTO vendaDto) {
         Cliente cliente = validarClienteVendaExiste(codigoCliente);
         validarProdutoExisteEAtualizarQuantidade(vendaDto.getItensVendaDto());
         Venda vendaSalva = salvarVenda(cliente, vendaDto);
         return retornandoClienteVendaResponseDTO(vendaSalva, itemVendaRepositorio.findByVendaPorCodigo(vendaSalva.getCodigo()));
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = Exception.class)
+    public void deletar(Long codigoVenda) {
+        validarVendaExiste(codigoVenda);
+        List<ItemVenda> itensVenda = itemVendaRepositorio.findByVendaPorCodigo(codigoVenda);
+        validarProdutoExisteEDevolverEstoque(itensVenda);
+        itemVendaRepositorio.deleteAll(itensVenda);
+        vendaRepositorio.deleteById(codigoVenda);
+    }
+
+    private void validarProdutoExisteEDevolverEstoque(List<ItemVenda> itensVenda) {
+        itensVenda.forEach(item -> {
+            Produto produto = produtoServico.validarProdutoExiste(item.getProduto().getCodigo());
+            produto.setQuantidade(produto.getQuantidade() + item.getQuantidade());
+            produtoServico.atualizarQuantidadeEmEstoque(produto);
+        });
     }
 
     private Venda salvarVenda(Cliente cliente, VendaRequestDTO vendaDto) {
@@ -70,7 +90,7 @@ public class VendaServico extends AbstractVendaServico {
             Produto produto = produtoServico.validarProdutoExiste(item.getCodigoProduto());
             validarQuantidadeProdutoExiste(produto, item.getQuantidade());
             produto.setQuantidade(produto.getQuantidade() - item.getQuantidade());
-            produtoServico.atualizarQuantidadeAposVenda(produto);
+            produtoServico.atualizarQuantidadeEmEstoque(produto);
         });
     }
 
